@@ -1,0 +1,324 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+		<title>Aplicación para turnos</title>
+	</head>
+	<body style="max-width: 100%">
+		<div class="row">
+			<div class="col-md-12">
+				<div align="center">Aplicación para turnos</div>
+				<a href="index.html" class="btn btn-warning">Anterior</a>
+				<button class="btn btn-success" id="start">Iniciar</button>
+			</div>
+			<!-- <br>
+			<div class="col-md-12" style="max-width: 100%">
+
+			</div> -->
+		</div>
+		<div class="row">
+			<div class="col-12">
+				<!-- <h1> -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnonturn" style="font-size: 120px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnonname" style="font-size: 120px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnontime" style="font-size: 120px"></span>s<!-- </h1> -->
+				<input type="hidden" id="turnonid">
+			</div>
+		</div>
+		<div class="row" style="margin-top: 10%">
+			<div class="col-6">
+				<div class="row">
+					<span style="margin-left: 30%;">Proximo Turno</span>
+				</div>
+				<div class="row" style="margin-top: 10%;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 40px" id="turnnextturn"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnnextname" style="font-size: 40px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnnexttime" style="font-size: 40px"></span>
+				</div>
+			</div>
+			<div class="col-3">
+				<div id="last">
+					1 - Alex Cruz - Terminado <br>
+					2 - Carlos Fuentes - Terminado <br>
+					3 - Miguel Lopez - Terminado <br>
+				</div>
+			</div>
+			<div class="col-3">
+				<div id="next">
+					4 - Alex Cruz - 10s <br>
+					5 - Carlos Fuentes - 15s <br>
+					6 - Miguel Lopez - 20s <br>
+				</div>
+			</div>
+		</div>
+		<!-- <table id="table">
+			<thead>
+				<th width="25%">
+					<td width="25%">N°</td>
+					<td width="25%">Nombre</td>
+					<td width="25%">Tiempo Pantalla</td>
+					<td width="25%">Acción</td>
+				</th>
+			</thead>
+			<tbody id="tablebody">
+				<tr width="100%">
+					<td width="25%">1</td>
+					<td width="25%">Alex</td>
+					<td width="25%">60s</td>
+					<td width="25%">T</td>
+				</tr>
+				<tr width="100%">
+					<td width="25%">5</td>
+					<td width="25%">Ruben</td>
+					<td width="25%">43s</td>
+					<td width="25%">P</td>
+				</tr>
+				<tr width="100%">
+					<td width="25%">2</td>
+					<td width="25%">Carlos</td>
+					<td width="25%">30s</td>
+					<td width="25%">T</td>
+				</tr>
+			</tbody>
+		</table> -->
+	</body>
+	<script>
+		window.jQuery = window.$ = require('jquery');
+	</script>
+	<script>
+		var mysql = require('mysql');
+
+		var connection = mysql.createConnection({
+		    host     : 'localhost',
+		    user     : 'root',
+		    password : null, 
+		    database : 'electron'
+		});
+
+		connection.connect(function(err) {
+		    if(err){
+		        console.log(err.code);
+		        console.log(err.fatal);
+		    }
+		});
+
+		$query = 'SELECT * FROM `clientes` WHERE status = 1 ORDER BY turn ASC LIMIT 1';
+
+		connection.query($query, function(err, rows, fields) {
+		    if(err){
+		        console.log("An error ocurred performing the query.");
+		        console.log(err);
+		        return;
+		    }
+
+		    rows.forEach(function(row) {
+		    	console.log(row);
+		    	$('#turnonturn').text(row.turn);
+		    	$('#turnonname').text(row.name);
+		    	$('#turnontime').text(row.time);
+		    	$('#turnonid').val(row.id);
+		    });
+
+		    var id = $('#turnonid').val();
+
+		    var sql = 'SELECT * FROM `clientes` WHERE status = 1 AND id != ' + id + ' ORDER BY turn ASC LIMIT 1';
+		    connection.query(sql, function(err, rows, fields) {
+			    if(err){
+			        console.log("An error ocurred performing the query.");
+			        console.log(err);
+			        return;
+			    }
+
+			    if(rows.length > 0){
+			    	rows.forEach(function(row) {
+				    	$('#turnnextturn').text(row.turn);
+				    	$('#turnnextname').text(row.name);
+				    	$('#turnnexttime').text(row.time);
+				    });
+			    }
+			    else {
+			    	$('#turnnextturn').text('');
+				    $('#turnnextname').text('');
+				    $('#turnnexttime').text('');
+			    }
+			    
+			});
+
+			var sql2 = 'SELECT * FROM `clientes` WHERE status = 1 AND id != ' + id + ' ORDER BY turn ASC';
+
+			connection.query(sql2, function(err, rows, fields) {
+			    if(err){
+			        console.log("An error ocurred performing the query.");
+			        console.log(err);
+			        return;
+			    }
+
+			    var html = '';
+			    var array = [];
+
+			    if(rows.length > 0) {
+			    	rows.forEach(function(row) {
+			    		html = row.turn + ' - ' + row.name + ' - ' + row.time + '<br>';
+			    		array.push(html);
+			    	});
+			    	$('#next').html(array);
+			    }
+			    else
+			    {
+				    $('#next').html('');
+			    }
+			});
+
+			var sql3 = 'SELECT * FROM `clientes` WHERE status = 2 AND id != ' + id + ' ORDER BY turn ASC';
+
+			connection.query(sql3, function(err, rows, fields) {
+			    if(err){
+			        console.log("An error ocurred performing the query.");
+			        console.log(err);
+			        return;
+			    }
+
+			    var html = '';
+			    var array = [];
+
+			    if(rows.length > 0) {
+			    	rows.forEach(function(row) {
+			    		html = row.turn + ' - ' + row.name + ' - Terminado<br>';
+			    		array.push(html);
+			    	});
+			    	$('#last').html(array);
+			    }
+			    else
+			    {
+				    $('#last').html('');
+			    }
+			});
+		});
+
+		$('#start').click(function(){
+			var i = 0;
+
+			var interval = setInterval(function(){
+				var time = parseInt($('#turnontime').text());
+				var time2 = time - 1;
+
+				if(time2 == i){
+					clearInterval(interval);
+
+					var id = $('#turnonid').val();
+
+					$query2 = 'UPDATE `clientes` SET status = 2 WHERE id = ' + id;
+
+					connection.query($query2, function(error, results, fields) {
+					    if (error){
+					        console.log(error.message);
+					        return;
+					    }
+					  
+					    $query = 'SELECT * FROM `clientes` WHERE status = 1 ORDER BY turn ASC LIMIT 1';
+
+						connection.query($query, function(err, rows, fields) {
+						    if(err){
+						        console.log("An error ocurred performing the query.");
+						        console.log(err);
+						        return;
+						    }
+
+						    if(rows.length > 0) {
+						    	rows.forEach(function(row) {
+							    	console.log(row);
+							    	$('#turnonturn').text(row.turn);
+							    	$('#turnonname').text(row.name);
+							    	$('#turnontime').text(row.time);
+		    						$('#turnonid').val(row.id);
+							    });
+
+							    var id = $('#turnonid').val();
+
+							    var sql2 = 'SELECT * FROM `clientes` WHERE status = 1 AND id != ' + id + ' ORDER BY turn ASC';
+
+								connection.query(sql2, function(err, rows, fields) {
+								    if(err){
+								        console.log("An error ocurred performing the query.");
+								        console.log(err);
+								        return;
+								    }
+
+								    var html = '';
+								    var array = [];
+
+								    if(rows.length > 0) {
+								    	rows.forEach(function(row) {
+								    		html = row.turn + ' - ' + row.name + ' - ' + row.time + '<br>';
+								    		array.push(html);
+								    	});
+								    	$('#next').html(array);
+								    }
+								    else
+								    {
+									    $('#next').html('');
+								    }
+								});
+
+								var sql3 = 'SELECT * FROM `clientes` WHERE status = 2 AND id != ' + id + ' ORDER BY turn ASC';
+
+								connection.query(sql3, function(err, rows, fields) {
+								    if(err){
+								        console.log("An error ocurred performing the query.");
+								        console.log(err);
+								        return;
+								    }
+
+								    var html = '';
+								    var array = [];
+
+								    if(rows.length > 0) {
+								    	rows.forEach(function(row) {
+								    		html = row.turn + ' - ' + row.name + ' - Terminado<br>';
+								    		array.push(html);
+								    	});
+								    	$('#last').html(array);
+								    }
+								    else
+								    {
+									    $('#last').html('');
+								    }
+								});
+
+							    var sql = 'SELECT * FROM `clientes` WHERE status = 1 AND id != ' + id + ' ORDER BY turn ASC LIMIT 1';
+							    connection.query(sql, function(err, rows, fields) {
+								    if(err){
+								        console.log("An error ocurred performing the query.");
+								        console.log(err);
+								        return;
+								    }
+
+								    if(rows.length > 0) {
+								    	rows.forEach(function(row) {
+									    	$('#turnnextturn').text(row.turn);
+									    	$('#turnnextname').text(row.name);
+									    	$('#turnnexttime').text(row.time);
+								    	});
+								    }
+								    else
+								    {
+								    	$('#turnnextturn').text('');
+									    $('#turnnextname').text('');
+									    $('#turnnexttime').text('');
+								    }
+								    
+								});
+
+								$( "#start" ).trigger( "click" );
+						    }
+						    else
+						    {
+						    	$('#turnonturn').text('');
+							    $('#turnonname').text('');
+							    $('#turnontime').text('');
+		    					$('#turnonid').val('');
+						    }
+						});
+					});
+				}
+				$('#turnontime').text(time2);
+			}, 1000);
+		});
+	</script>
+</html>

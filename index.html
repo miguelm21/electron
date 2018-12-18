@@ -1,0 +1,237 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+		<title>Aplicación para turnos</title>
+	</head>
+	<body style="max-width: 100%">
+		<div class="row">
+			<div class="col-md-12">
+				<div align="center">Aplicación para turnos</div>
+				<a href="second.html" class="btn btn-info">Siguiente</a>
+			</div>
+			<br>
+			<div class="col-md-12" style="max-width: 100%">
+				<div class="row">
+					<div class="col-md">
+						<label for="name">Nombre y Apellido</label>
+						<input type="text" id="name" class="form-control">
+					</div>
+					<div class="col-md">
+						<label for="turn">Turno</label>
+						<input type="number" id="turn" class="form-control">
+					</div>
+					<div class="col-md">
+						<label for="time">Tiempo</label>
+						<input type="number" id="time" class="form-control">
+					</div>
+				</div><br>
+				<button class="btn btn-danger pull-right" id="deleteAll" onclick="deleteAll()">
+					Borrar Todo
+				</button>
+				<button class="btn btn-success pull-right" id="save">
+					Guardar
+				</button>
+			</div>
+		</div>
+		<table id="table">
+			<thead>
+				<th width="25%">
+					<td width="25%">N°</td>
+					<td width="25%">Nombre</td>
+					<td width="25%">Tiempo Pantalla</td>
+					<td width="25%">Acción</td>
+				</th>
+			</thead>
+			<tbody id="tablebody">
+				<tr width="100%">
+					<td width="25%">1</td>
+					<td width="25%">Alex</td>
+					<td width="25%">60s</td>
+					<td width="25%">T</td>
+				</tr>
+				<tr width="100%">
+					<td width="25%">5</td>
+					<td width="25%">Ruben</td>
+					<td width="25%">43s</td>
+					<td width="25%">P</td>
+				</tr>
+				<tr width="100%">
+					<td width="25%">2</td>
+					<td width="25%">Carlos</td>
+					<td width="25%">30s</td>
+					<td width="25%">T</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+
+	<script>
+		window.jQuery = window.$ = require('jquery');
+	</script>
+	<script>
+		var mysql = require('mysql');
+		var Dialogs = require('dialogs')
+
+		var connection = mysql.createConnection({
+		    host     : 'localhost',
+		    user     : 'root',
+		    password : null, 
+		    database : 'electron'
+		});
+
+		connection.connect(function(err) {
+		    if(err){
+		        console.log(err.code);
+		        console.log(err.fatal);
+		    }
+		});
+
+		$query = 'SELECT * FROM `clientes`';
+
+		connection.query($query, function(err, rows, fields) {
+		    if(err){
+		        console.log("An error ocurred performing the query.");
+		        console.log(err);
+		        return;
+		    }
+
+		    var html = '';
+
+		    rows.forEach(function(row) {
+		    	html += '<tr width="100%" id="' + row.turn + '">';
+                html += '<td width="25%">';
+                html += row.turn;
+                html += '</td>';
+                html += '<td width="25%">';
+                html += row.name;
+                html += '</td>';
+                html += '<td width="25%">';
+                html += row.time;
+                html += '</td>';
+                html += '<td width="25%">';
+                html += '<button class="btn btn-danger delete" id="' + row.id + '"onclick="deleteTurn(this.id)">Borrar</button>';
+                html += '</td>';
+                html += '</tr>';
+		    })
+		    
+		    document.querySelector('#table > tbody').innerHTML = html;
+		});
+
+		$('#save').click(function(){
+			var name = document.getElementById('name').value;
+			var turn = document.getElementById('turn').value;
+			var time = document.getElementById('time').value;
+
+			var val = document.getElementById(turn);
+
+			if(name == '' || name == null || name == undefined) {
+				alert('El Nombre y Apellido no puede estar vacio'); 
+			}
+			else if(turn == '' || turn == null || turn == undefined) {
+				alert('El Turno no puede estar vacio'); 
+			}
+			else if(time == '' || time == null || time == undefined) {
+				alert('El Tiempo no puede estar vacio'); 
+			}
+			else if(val != null) {
+				alert('Este turno ya existe'); 
+			}
+			else {
+				$query2 = 'INSERT INTO clientes (name, turn, time) VALUES ("' + name + '", ' + turn + ', ' + time + ')';
+
+				connection.query($query2, function (err, result) {
+				    if(err){
+						console.log("An error ocurred performing the query.");
+					   	console.log(err);
+				    }
+				    console.log("1 record inserted");
+
+				    connection.query($query, function(err, rows, fields) {
+					    if(err){
+					        console.log("An error ocurred performing the query.");
+					        console.log(err);
+					        return;
+					    }
+
+					    /*console.log("Query succesfully executed", rows);*/
+					    var html = '';
+
+					    rows.forEach(function(row) {
+					    	html += '<tr width="100%" id="' + row.turn + '">';
+			                html += '<td width="25%">';
+			                html += row.turn;
+			                html += '</td>';
+			                html += '<td width="25%">';
+			                html += row.name;
+			                html += '</td>';
+			                html += '<td width="25%">';
+			                html += row.time;
+			                html += '</td>';
+			                html += '<td width="25%">';
+			                html += '<button class="btn btn-danger delete" id="' + row.id + '"onclick="deleteTurn(this.id)">Borrar</button>';
+			                html += '</td>';
+			                html += '</tr>';
+			                /*console.log(row);*/
+					    })
+					    
+					    document.querySelector('#table > tbody').innerHTML = html;
+					});
+				});
+			}
+		})
+
+		function deleteTurn(id) {
+			var sql = "DELETE FROM clientes WHERE id = " + id;
+		    connection.query(sql, function (err, result) {
+		    	if(err){
+			        console.log("An error ocurred performing the query.");
+			        console.log(err);
+			        return;
+			    }
+		    	
+		    	connection.query($query, function(err, rows, fields) {
+				    if(err){
+				        console.log("An error ocurred performing the query.");
+				        console.log(err);
+				        return;
+				    }
+
+				    var html = '';
+
+				    rows.forEach(function(row) {
+				    	html += '<tr width="100%" id="' + row.turn + '">';
+		                html += '<td width="25%">';
+		                html += row.turn;
+		                html += '</td>';
+		                html += '<td width="25%">';
+		                html += row.name;
+		                html += '</td>';
+		                html += '<td width="25%">';
+		                html += row.time;
+		                html += '</td>';
+		                html += '<td width="25%">';
+		                html += '<button class="btn btn-danger" onclick="delete(' + row.id + ')">Borrar</button>';
+		                html += '</td>';
+		                html += '</tr>';
+				    })
+				    
+				    document.querySelector('#table > tbody').innerHTML = html;
+				});
+		    });
+		}
+
+		function deleteAll() {
+			var sql = "DELETE FROM clientes";
+		    connection.query(sql, function (err, result) {
+		    	if(err){
+			        console.log("An error ocurred performing the query.");
+			        console.log(err);
+			        return;
+			    }
+			    document.querySelector('#table > tbody').innerHTML = '';
+			})
+		}
+	</script>
+</html>
