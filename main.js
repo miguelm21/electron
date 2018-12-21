@@ -19,7 +19,7 @@ function createWindow () {
   win.loadFile('index.html')
 
   // Abre las herramientas de desarrollo (DevTools).
-  win.webContents.openDevTools()
+  /*win.webContents.openDevTools()*/
 
   // Emitido cuando la ventana es cerrada.
   win.on('closed', () => {
