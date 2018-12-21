@@ -5,24 +5,24 @@
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
 		<title>Aplicación para turnos</title>
 	</head>
-	<body style="max-width: 100%">
+	<body style="width: 100%; padding: 10px;">
 		<div class="row">
 			<div class="col-md-12">
 				<div align="center">Aplicación para turnos</div>
 				<a href="second.html" class="btn btn-info">Siguiente</a>
 			</div>
 			<br>
-			<div class="col-md-12" style="max-width: 100%">
+			<div class="col-md-12" style="width: 100%; margin-top: 20px;">
 				<div class="row">
-					<div class="col-md">
+					<div class="col-md-4">
 						<label for="name">Nombre y Apellido</label>
 						<input type="text" id="name" class="form-control">
 					</div>
-					<div class="col-md">
+					<div class="col-md-4">
 						<label for="turn">Turno</label>
 						<input type="number" id="turn" class="form-control">
 					</div>
-					<div class="col-md">
+					<div class="col-md-4">
 						<label for="time">Tiempo</label>
 						<input type="number" id="time" class="form-control">
 					</div>
@@ -36,14 +36,12 @@
 			</div>
 		</div>
 		<input type="text" id="search" placeholder="Buscar...">
-		<table id="table">
-			<thead>
-				<th width="25%">
+		<table id="table" width="100%" style="margin-top:40px">
+			<thead width="100%" style="font-weight:900;">
 					<td width="25%">N°</td>
 					<td width="25%">Nombre</td>
 					<td width="25%">Tiempo Pantalla</td>
 					<td width="25%">Acción</td>
-				</th>
 			</thead>
 			<tbody id="tablebody">
 				<tr width="100%">

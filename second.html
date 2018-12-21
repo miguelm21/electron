@@ -2,50 +2,54 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+		<link rel="stylesheet" href="styles.css">
 		<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
 		<title>Aplicación para turnos</title>
 	</head>
-	<body style="max-width: 100%">
+	<body style="border: 10px outset rgb(44, 43, 43); width: 100%; padding: 10px 20px; background: linear-gradient(135deg, rgba(137,2,5,1) 0%,rgba(173,3,43,1) 50%,rgba(173,3,43,1) 51%,rgba(109,0,25,1) 100%);">
 		<div class="row">
 			<div class="col-md-12">
-				<div align="center">Aplicación para turnos</div>
-				<a href="index.html" class="btn btn-warning">Anterior</a>
-				<button class="btn btn-success" id="start">Iniciar</button>
+				<div align="center"></div>
+				<a href="index.html" class="btn btn-warning " style="background:black; color:white; border-color: black; opacity: 0.3;">Admin</a>
+				<button class="btn btn-success" id="start" style="background:black; color:white; border-color: black; opacity: 0.3;">Iniciar</button>
 			</div>
 			<!-- <br>
 			<div class="col-md-12" style="max-width: 100%">
 
 			</div> -->
 		</div>
-		<div class="row">
-			<div class="col-12">
-				<!-- <h1> -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnonturn" style="font-size: 120px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnonname" style="font-size: 120px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnontime" style="font-size: 120px"></span>s<!-- </h1> -->
+		<div class="row" style="margin-top: 40px">
+			<div class="col-12" style="margin: 1px auto; text-align:center; background: linear-gradient(135deg, rgba(137,2,5,1) 0%,rgba(206,4,37,0.82) 50%,rgba(204,4,37,0.82) 51%,rgba(109,0,25,1) 100%); color: white; font-weight:900; font-style:italic; border: 5px inset rgb(44, 43, 43);">
+				<!-- <h1> -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="max-width:200px; display:inline-block; background"><div style="width=200px; font-size:40px; padding:0px; margin-bottom:-50px;">TURNO</div><div id="turnonturn" style="font-size: 100px; width=200px"></div></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnonname" style="font-size: 100px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="max-width:200px; display:inline-block;"><div style="width=200px; font-size:30px; padding:0px; margin-bottom:-50px;">CRONOMETRO</div><div id="turnontime" style="font-size: 100px; width=200px"></div></div><!-- </h1> -->
 				<input type="hidden" id="turnonid">
 			</div>
 		</div>
-		<div class="row" style="margin-top: 10%">
-			<div class="col-6">
-				<div class="row">
-					<span style="margin-left: 30%;">Proximo Turno</span>
-				</div>
-				<div class="row" style="margin-top: 10%;">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 40px" id="turnnextturn"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnnextname" style="font-size: 40px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnnexttime" style="font-size: 40px"></span>
-				</div>
-			</div>
-			<div class="col-3">
-				<div id="last">
-					1 - Alex Cruz - Terminado <br>
-					2 - Carlos Fuentes - Terminado <br>
-					3 - Miguel Lopez - Terminado <br>
-				</div>
-			</div>
-			<div class="col-3">
-				<div id="next">
+		<div class="row" style="margin-top: 50px">
+			<div class="col-5" style="min-height: 250px; max-height:250px; overflow:hidden; background: linear-gradient(135deg, rgba(137,2,5,1) 0%,rgba(206,4,37,0.82) 50%,rgba(204,4,37,0.82) 51%,rgba(109,0,25,1) 100%); color: white; font-weight:900; font-style:italic; border: 5px inset rgb(44, 43, 43);">
+				<div id="next" style="text-align:center; font-size: 40px;">
 					4 - Alex Cruz - 10s <br>
 					5 - Carlos Fuentes - 15s <br>
 					6 - Miguel Lopez - 20s <br>
 				</div>
 			</div>
+			<div class="col-7" style="min-height: 250px; max-height:250px; background: linear-gradient(135deg, rgba(137,2,5,1) 0%,rgba(206,4,37,0.82) 50%,rgba(204,4,37,0.82) 51%,rgba(109,0,25,1) 100%); color: white; font-weight:900; font-style:italic; border: 5px inset rgb(44, 43, 43);">
+				<div class="row">
+					<span style="margin: 1px auto; font-size:50px;">TURNO SIGUIENTE</span>
+				</div>
+				<div class="" style="text-align:center;">
+					<span style="margin: 1px auto;">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 60px;" id="turnnextturn"></span><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="turnnextname" style="font-size: 30px"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				    </span>
+				</div>
+			</div>
+		<!--	<div class="col-3">
+				<div id="last">
+					1 - Alex Cruz - Terminado <br>
+					2 - Carlos Fuentes - Terminado <br>
+					3 - Miguel Lopez - Terminado <br>
+				</div>
+			</div> -->
+			
 		</div>
 		<!-- <table id="table">
 			<thead>
@@ -154,7 +158,7 @@
 
 			    if(rows.length > 0) {
 			    	rows.forEach(function(row) {
-			    		html = row.turn + ' - ' + row.name + ' - ' + row.time + '<br>';
+			    		html = row.turn + ' - ' + row.name +  '<br>';
 			    		array.push(html);
 			    	});
 			    	$('#next').html(array);
@@ -245,7 +249,7 @@
 
 								    if(rows.length > 0) {
 								    	rows.forEach(function(row) {
-								    		html = row.turn + ' - ' + row.name + ' - ' + row.time + '<br>';
+								    		html = row.turn + ' - ' + row.name + '<br>';
 								    		array.push(html);
 								    	});
 								    	$('#next').html(array);
